@@ -12,6 +12,7 @@ import (
 	"github.com/devopsfaith/krakend/logging"
 	router "github.com/devopsfaith/krakend/router/gin"
 	"github.com/gin-gonic/gin"
+	"github.com/letgoapp/krakend-influx"
 )
 
 func NewExecutor(ctx context.Context) cmd.Executor {
@@ -30,6 +31,8 @@ func NewExecutor(ctx context.Context) cmd.Executor {
 
 		// create the metrics collector
 		metricCollector := metrics.New(ctx, time.Minute, logger)
+
+		influxdb.New(ctx, cfg.ExtraConfig, metricCollector)
 
 		// setup the krakend router
 		routerFactory := router.NewFactory(router.Config{
